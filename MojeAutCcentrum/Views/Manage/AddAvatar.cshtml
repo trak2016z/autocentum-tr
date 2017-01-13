@@ -1,0 +1,47 @@
+﻿@model MojeAutCcentrum.Models.AddAvatar
+
+@{
+    ViewBag.Title = "Dodaj Avatar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj Avator</h2>
+
+@using (Html.BeginForm("AddAvatar", "Manage", FormMethod.Post, new { id = "Form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Edytor dodawania Avatara.</h4>
+        <hr />
+        <div class="form-group">
+            @Html.Label("Zdjęcie", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <table>
+                    <tr>
+                        <td>
+                            <img src="~/Content/Images/PoleAvatara.jpg" alt="Nowe zdjęcie" tabindex="0" height="300" width="300" id="NewImage">
+                            @Html.TextBoxFor(Model => Model.File, new { type = "file", id = "file", name = "file", onchange = "postinput()" })
+                            @Html.ValidationMessage("CustomError")
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Dodaj" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Powrót do listy", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/knockout/AddAvatar.js")
+}

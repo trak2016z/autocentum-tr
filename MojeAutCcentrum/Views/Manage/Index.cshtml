@@ -1,0 +1,56 @@
+﻿@model MojeAutCcentrum.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Change your account settings</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Hasło:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Zmień swoje hasło", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Utwórz hasło", "SetPassword")
+            }
+            ]
+        </dd>
+        <dt>Login zewnętrzny:</dt>
+        <dd>
+            @Model.Logins.Count [
+            @Html.ActionLink("Konto", "ManageLogins") ]
+        </dd>
+        <dt>Avatar:</dt>
+        <dd>
+            [
+            @if (Model.HasAvatar)
+            {
+                @Html.ActionLink("Zmień", "ChangeAvatar")
+            }
+            else
+            {
+                @Html.ActionLink("Dodaj", "AddAvatar")
+            }
+            ]
+
+            @if (Model.HasAvatar)
+            {
+                @Html.Name("[ ")
+                @Html.ActionLink("Usuń", "DeleteAvatar")
+                @Html.Name(" ]")
+            }
+            else
+            {
+            }
+
+        </dd>
+    </dl>
+</div>

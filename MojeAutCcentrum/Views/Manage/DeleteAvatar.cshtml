@@ -1,0 +1,29 @@
+﻿@model MojeAutCcentrum.Models.DeleteAvatar
+
+@{
+    ViewBag.Title = "Usuń Avatara";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuń Avatara</h2>
+
+<h3>Czy jesteś pewien, że chcesz usunąć Avatara?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dd>
+            <img src="data:image/jpeg;base64,@Model.Avatar" alt="Nowe zdjęcie" tabindex="0" height="300" width="300" id="NewImage">
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Usuń" class="btn btn-danger" /> 
+            @Html.ActionLink("Powrót", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MojeAutCcentrum.Models.RatingCarViewModels>
+@using MojeAutCcentrum.Models;
+@{
+    ViewBag.Title = "Pulpit";
+    int position = 0;
+}
+
+<div class="jumbotron">
+    <h1>Opinia Klientów</h1>
+    <p class="lead">U nas możesz dodać swoją ocenę na dowolną markę/model auta. Zapraszamy do oceniania.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Raport aut</h2>
+        <p>
+            Tutaj znajdziesz 10 najlepiej ocenionych aut. Czy ty takrze uważasz, że te modele zasługują na bycie w Top 10!
+        </p>
+        <p>@Html.ActionLink("Dodaj Ocenę", "Add", "Home", htmlAttributes: new { @class = "btn btn-success", value = "&raquo;" })</p>
+        <div class="col-md-12">
+            @foreach (var RatingCar in Model)
+            {
+                var send = new RCViewVM();
+                send.Brand = RatingCar.Brand.Id;
+                <div class="jumbotron">
+                    <div class="row">
+                        <div class="col-md-1"><h3>(@{position++;}@position)</h3><hr /></div>
+                        <div class="col-md-9">
+                            <dl class="dl-horizontal">
+                                <dt>Marka</dt>
+                                <dd>@RatingCar.Brand.Name</dd>
+                                @if (RatingCar.Model != null)
+                                {
+                                    send.Model = RatingCar.Model.Id;
+                                    if (RatingCar.Model.Name != null && RatingCar.Model.Name != "")
+                                    {
+                                        <dt>Model</dt>
+                                        <dd>@RatingCar.Model.Name</dd>
+                                    }
+                                }
+                                @if (RatingCar.Generation != null)
+                                {
+                                    send.Generation = RatingCar.Generation.Id;
+                                    if (RatingCar.Generation.Name != null && RatingCar.Generation.Name != "")
+                                    {
+                                        <dt>Generacja</dt>
+                                        <dd>@RatingCar.Generation.Name</dd>
+
+                                    }
+                                }
+                                @if (RatingCar.Body != null)
+                                {
+                                    send.Body = RatingCar.Body.Id;
+                                    if (RatingCar.Body.Name != null && RatingCar.Body.Name != "")
+                                    {
+                                        <dt>Podwozie</dt>
+                                        <dd>@RatingCar.Body.Name</dd>
+                                    }
+                                }
+                                @if (RatingCar.Motor != null)
+                                {
+                                    send.Motor = RatingCar.Motor.Id;
+                                    if (RatingCar.Motor != null && RatingCar.Motor.Name != null && RatingCar.Motor.Name != "")
+                                    {
+                                        <dt>Silnik</dt>
+                                        <dd>@RatingCar.Motor.Name</dd>
+                                    }
+                                }
+                                @{
+                                    send.rating = RatingCar.rating;
+                                    send.number = RatingCar.number;
+                                }
+                            </dl>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    Ocena: @RatingCar.rating.ToString("0.##")
+                                </div>
+                                <hr />
+                                <div class="col-md-12">
+                                    <p>@Html.ActionLink("Zobacz", "Car", "Home", send, htmlAttributes: new { @class = "btn btn-warning" })</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                    }
+        </div>
+    </div>
+</div>

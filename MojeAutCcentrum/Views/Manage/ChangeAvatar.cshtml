@@ -1,0 +1,66 @@
+﻿@model MojeAutCcentrum.Models.ChangeAvatar
+
+@{
+    ViewBag.Title = "Zmień Avatar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zmiana Avatara</h2>
+
+@using (Html.BeginForm("ChangeAvatar", "Manage", FormMethod.Post, new { id = "Form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal">
+        <h4>Tutaj możesz zmienić swojego avatara na nowego.</h4>
+        <hr />
+        <div class="form-group row">
+            <div class="col-md-2"></div>
+
+            <div class="col-md-4">
+                <div class="row col-md-12">
+                    <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;@Html.Label("Nowy avatar", htmlAttributes: new { @class = "text-md-center" })
+                </div><div class="row col-md-12">
+                    <img  src="~/Content/Images/PoleAvatara.jpg" alt="Nowe zdjęcie" tabindex="0" height="300" width="300" id="NewImage">
+                </div>
+                <div class="row col-md-12">
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.File, new { type = "file", id = "file", onchange = "postinput()", name = "file" })
+                                @Html.ValidationMessage("CustomError")
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row col-md-12">
+                    <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; @Html.Label("Poprzedni avatar", htmlAttributes: new { @class = "text-md-center" })
+                </div>
+                <div class="row col-md-12">
+                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Avatar.Fream))" alt="" height="300" width="300" />
+                </div>
+            </div>
+            
+            <div class="col-md-2"></div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
+                <input type="submit" value="Zapisz zmianę" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Powróć do swojego konta.", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/knockout/ChangeAvatar.js")
+}

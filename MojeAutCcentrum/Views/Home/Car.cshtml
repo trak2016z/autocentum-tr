@@ -1,0 +1,152 @@
+﻿@model MojeAutCcentrum.Models.RatingCarEntityViewModels
+
+@{
+    ViewBag.Title = "Auto";
+}
+
+<h2>Samochód</h2>
+
+<div>
+    <p>
+        @Html.ActionLink("Powrót", "Index")
+    </p>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+        </dt>
+        <dd>
+            <h4>Poszczeólne parametry pojazdu</h4>
+        </dd>
+        @{
+            if (Model.Brand != null && Model.Brand.Name != "" && Model.Model.Name != null)
+            {
+                <dt>
+                    @Html.DisplayName("Marka")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Brand.Name)
+                </dd>
+            }
+            if (Model.Model != null && Model.Model.Name != "" && Model.Model.Name != null)
+            {
+                <dt>
+                    @Html.DisplayName("Model")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Model.Name)
+                </dd>
+            }
+            if (Model.Generation != null && Model.Generation.Name != "" && Model.Generation.Name != null)
+            {
+                <dt>
+                    @Html.DisplayName("Generacja")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Generation.Name)
+                </dd>
+            }
+            if (Model.Body != null && Model.Body.Name != "" && Model.Body.Name != null)
+            {
+                <dt>
+                    @Html.DisplayName("Nadwozie")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Body.Name)
+                </dd>
+            }
+            if (Model.Motor != null && Model.Motor.Name != "" && Model.Motor.Name != null)
+            {
+                <dt>
+                    @Html.DisplayName("Silnik")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Motor.Name)
+                </dd>
+            }
+        }
+        <dt>
+        </dt>
+        <dd>
+            <h4>Oceny</h4>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Failure)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Failure)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Conveniences)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Conveniences)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Maintenance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Maintenance)
+        </dd>
+
+    </dl>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h2>Opinie użytkowników</h2>
+        @foreach (var Comment in Model.Comment)
+            {<div class="jumbotron">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (Comment.Image != null)
+                    {
+                        <img src="@Comment.Image" class=".img-circle" height="100" width="100" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/Images/neutral-avatar.png" class=".img-circle" height="100" width="100" />
+                    }
+                </div>
+                <div class="col-md-8">
+                    <h4>@Comment.Email</h4><hr />
+                    <p>@Comment.Massage.Description</p>
+                    @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "" || Comment.Massage.Failure != null && Comment.Massage.Failure != "" || Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
+                    {
+                        <div>Informacja dodatkowa:</div>
+                    }
+                    @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "")
+                    {
+                        <div>
+                            &#8226; ( Konfortowość ) - @Comment.Massage.Conveniences
+                        </div>
+                    }
+                    @if (Comment.Massage.Failure != null && Comment.Massage.Failure != "")
+                    {<div>
+                        &#8226; ( Awaryjność ) - @Comment.Massage.Failure
+                    </div> }
+                    @if (Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
+
+                    {<div>
+                        &#8226; ( Koszt utrzymania ) - @Comment.Massage.Maintenance
+                    </div>}
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <div class="col-md-2"></div>
+</div>
