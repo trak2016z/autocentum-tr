@@ -1,0 +1,120 @@
+﻿@model MojeAutCcentrum.Models.AddRatingCarVM
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Dodaj ocenę";
+}
+
+<h2>Dodaj ocenę</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <h4>Proszę wybrać odpowienie parametry</h4>
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BrandId, new SelectList(Model.Brand, "Id", "Name"), "- wybierz markę -", new { @class = "form-control select-to-change" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModelId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ModelId, new SelectList(Model.Model, "Id", "Name"), "- wybierz model -", new { @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GenerationId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GenerationId, new SelectList(Model.Generation, "Id", "Name"), "- wybierz generację -", new {  @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BodyId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BodyId, new SelectList(Model.Body, "Id", "Name"), "- wybierz podwozie -", new { @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MotorId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MotorId, new SelectList(Model.Motor, "Id", "Name"), "- wybierz silnik -", new { @class = "form-control", disabled = "" })
+            </div>
+        </div>
+        <hr />
+        <h4>Twoje oceny</h4>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Conveniences, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Conveniences.Value, new SelectList(Model.Values))
+                <div class="starRating"><span value="1" class="hoverChosen"></span><span value="2"></span><span value="3"></span><span value="4"></span><span value="5"></span></div>
+                @Html.Hidden("Conveniences.Type",Model.Conveniences.Type)
+            </div>
+            @Html.Label("Opinia dodatkowa", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Conveniences.Description, new { @class = "form-control", rows = "3", cols = "40", style = "resize: none;" })
+                @Html.ValidationMessageFor(model => model.Conveniences.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Failure, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Failure.Value, new SelectList(Model.Values))
+                <div class="starRating"><span value="1" class="hoverChosen"></span><span value="2"></span><span value="3"></span><span value="4"></span><span value="5"></span></div>
+                @Html.Hidden("Failure.Type", Model.Failure.Type)
+            </div>
+            @Html.Label("Opinia dodatkowa", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Failure.Description, new { @class = "form-control", rows = "3", cols = "40", style = "resize: none;" })
+                @Html.ValidationMessageFor(model => model.Failure.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Maintenance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Maintenance.Value, new SelectList(Model.Values))
+                <div class="starRating"><span value="1" class="hoverChosen"></span><span value="2"></span><span value="3"></span><span value="4"></span><span value="5"></span></div>
+                @Html.Hidden("Maintenance.Type", Model.Maintenance.Type)
+            </div>
+            @Html.Label("Opinia dodatkowa", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Maintenance.Description, new { @class = "form-control", rows = "3", cols = "40", style = "resize: none;" })
+                @Html.ValidationMessageFor(model => model.Maintenance.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <h4>Dodatkowe dane</h4>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description,  new { @class = "form-control", rows = "6", cols = "60", style = "resize: none;"  })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger"})
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (Request.IsAuthenticated)
+                {
+                    <input type="submit" value="Dodaj" class="btn btn-success" />
+                }
+                else
+                {
+
+                    @Html.ActionLink("Zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-default" })
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/add")
+}

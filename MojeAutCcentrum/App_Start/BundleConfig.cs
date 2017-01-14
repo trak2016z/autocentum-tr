@@ -23,9 +23,16 @@ namespace MojeAutCcentrum
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+                      "~/Scripts/knockout-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/add").Include(
+                      "~/Scripts/knockout/AddRatingCar.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/MyStyle.css"));
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Web;
 
 namespace MojeAutCcentrum.Models
 {
-    //[JsonObject(IsReference = true)]
+    [JsonObject(IsReference = true)]
     public class Motor
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

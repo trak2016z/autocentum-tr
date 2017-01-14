@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MojeAutCcentrum.Models
 {
-    //[JsonObject(IsReference = true)]
+    [JsonObject(IsReference = true)]
     public class Brand
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -136,19 +136,58 @@ namespace MojeAutCcentrum.Controllers
                 if (item.number != 0)
                     item.rating = item.rating / item.number;
             }
-            return View(models.OrderByDescending(x => x.rating).Take(10));
+            var VM = models.OrderByDescending(x => x.rating).Take(10).ToList();
+            return View(VM);
         }
 
         [HttpGet]
         public ActionResult Add()
         {
-            return View();
+            var model = new AddRatingCarVM();
+            model.Brand = db.Brand.ToList();
+            model.Model = new List<Model>();
+            model.Generation = new List<Generation>();
+            model.Body = new List<Body>();
+            model.Motor = new List<Motor>();
+            model.Maintenance = new Rating() { Type = "Maintenance", Value = 1 };
+            model.Failure = new Rating() { Type = "Failure", Value = 1 };
+            model.Conveniences = new Rating() { Type = "Conveniences", Value = 1 };
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Add(RatingCar model)
+        public async Task<ActionResult> Add(AddRatingCarVM model)
         {
-            return View();
+            try
+            {
+                var element = new RatingCar();
+                var user = await UserManager.FindByEmailAsync(User.Identity.Name);
+                element.UserId = user.Id;
+                if (model.BodyId != -1) element.Body = db.Body.FirstOrDefault(x => x.Id == model.BodyId);
+                if (model.BrandId != -1) element.Brand = db.Brand.FirstOrDefault(x => x.Id == model.BrandId);
+                if (model.GenerationId != -1) element.Generation = db.Generation.FirstOrDefault(x => x.Id == model.GenerationId);
+                if (model.ModelId != -1) element.Model = db.Model.FirstOrDefault(x => x.Id == model.ModelId);
+                if (model.MotorId != -1) element.Motor = db.Motor.FirstOrDefault(x => x.Id == model.MotorId);
+                element.Description = model.Description;
+                element.Conveniences = model.Conveniences;
+                element.Failure = model.Failure;
+                element.Maintenance = model.Maintenance;
+                db.RatingCar.Add(element);
+                await db.SaveChangesAsync();
+                var send = new RCViewVM();
+                if(element.Brand != null) send.Brand = element.Brand.Id;
+                if (element.Body != null) send.Body = element.Body.Id;
+                if (element.Generation != null) send.Generation = element.Generation.Id;
+                if (element.Model != null) send.Model = element.Model.Id;
+                if (element.Motor != null) send.Motor = element.Motor.Id;
+                return RedirectToAction("Car", send);
+            }
+            catch (Exception e)
+            {
+                e.Data.Values.GetEnumerator();
+            }
+
+            return RedirectToAction("Index");
         }
 
 
@@ -212,27 +251,28 @@ namespace MojeAutCcentrum.Controllers
 
 
         [HttpGet]
-        public JsonResult Collection(string NameModel, string Id)
+        public ActionResult Collection(string NameModel, string Id)
         {
+            var GetId = Convert.ToInt32(Id);
             if (NameModel == "Brand")
             {
-
+                var items = this.db.Brand.First(x => x.Id == GetId).Models.Where(x => x.Name != null && x.Name != "").ToList();
+                return Json(items, JsonRequestBehavior.AllowGet);
             }
             else if (NameModel == "Model")
             {
-
+                var items = this.db.Model.First(x => x.Id == GetId).Generations.Where(x => x.Name != null && x.Name != "").ToList();
+                return Json(items, JsonRequestBehavior.AllowGet);
             }
             else if (NameModel == "Generation")
             {
-
+                var items = this.db.Generation.First(x => x.Id == GetId).Body.Where(x => x.Name != null && x.Name != "").ToList();
+                return Json(items, JsonRequestBehavior.AllowGet);
             }
             else if (NameModel == "Body")
             {
-
-            }
-            else if (NameModel == "Motor")
-            {
-
+                var items = this.db.Body.First(x => x.Id == GetId).Motors.Where(x => x.Name != null && x.Name != "").ToList();
+                return Json(items, JsonRequestBehavior.AllowGet);
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }

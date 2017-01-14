@@ -1,5 +1,5 @@
 ﻿@model MojeAutCcentrum.Models.RatingCarEntityViewModels
-
+@using MojeAutCcentrum.Models
 @{
     ViewBag.Title = "Auto";
 }
@@ -8,7 +8,7 @@
 
 <div>
     <p>
-        @Html.ActionLink("Powrót", "Index")
+        @Html.ActionLink("Powrót", "Index", "Home", htmlAttributes: new { @class = "btn btn-default" })
     </p>
     <hr />
     <dl class="dl-horizontal">
@@ -109,43 +109,47 @@
     <div class="col-md-8">
         <h2>Opinie użytkowników</h2>
         @foreach (var Comment in Model.Comment)
-            {<div class="jumbotron">
-            <div class="row">
-                <div class="col-md-4">
-                    @if (Comment.Image != null)
+        {
+            if (Comment.Massage.Description != null || Comment.Massage.Description != "" && Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "" || Comment.Massage.Failure != null && Comment.Massage.Failure != "" || Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
+            {
+                <div class="jumbotron">
+                    <div class="row">
+                        <div class="col-md-4">
+                            @if (Comment.Image != null)
                     {
-                        <img src="@Comment.Image" class=".img-circle" height="100" width="100" />
-                    }
-                    else
-                    {
-                        <img src="~/Content/Images/neutral-avatar.png" class=".img-circle" height="100" width="100" />
-                    }
-                </div>
-                <div class="col-md-8">
-                    <h4>@Comment.Email</h4><hr />
-                    <p>@Comment.Massage.Description</p>
-                    @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "" || Comment.Massage.Failure != null && Comment.Massage.Failure != "" || Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
-                    {
-                        <div>Informacja dodatkowa:</div>
-                    }
-                    @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "")
-                    {
-                        <div>
-                            &#8226; ( Konfortowość ) - @Comment.Massage.Conveniences
+                                <img src="@Comment.Image" class="img-circle" height="200" width="200" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/Images/neutral-avatar.png" class="img-circle" height="200" width="200" />
+                            }
                         </div>
-                    }
-                    @if (Comment.Massage.Failure != null && Comment.Massage.Failure != "")
+                        <div class="col-md-8">
+                            <h4>@Comment.Email</h4><hr />
+                            <p>@Comment.Massage.Description</p>
+                            @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "" || Comment.Massage.Failure != null && Comment.Massage.Failure != "" || Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
+                    {
+                                <div>Informacja dodatkowa:</div>
+                            }
+                            @if (Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "")
+                    {
+                                <div>
+                                    &#8226; ( Konfortowość ) - @Comment.Massage.Conveniences
+                                </div>
+                            }
+                            @if (Comment.Massage.Failure != null && Comment.Massage.Failure != "")
                     {<div>
                         &#8226; ( Awaryjność ) - @Comment.Massage.Failure
                     </div> }
-                    @if (Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
+                            @if (Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
 
                     {<div>
                         &#8226; ( Koszt utrzymania ) - @Comment.Massage.Maintenance
                     </div>}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            }
         }
     </div>
     <div class="col-md-2"></div>
