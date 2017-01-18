@@ -29,6 +29,9 @@ namespace MojeAutCcentrum
             bundles.Add(new ScriptBundle("~/bundles/add").Include(
                       "~/Scripts/knockout/AddRatingCar.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/car").Include(
+                      "~/Scripts/knockout/CarView.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",

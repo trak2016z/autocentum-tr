@@ -16,7 +16,10 @@
         <p>
             Tutaj znajdziesz 10 najlepiej ocenionych aut. Czy ty takrze uważasz, że te modele zasługują na bycie w Top 10!
         </p>
-        <p>@Html.ActionLink("Dodaj Ocenę", "Add", "Home", htmlAttributes: new { @class = "btn btn-success", value = "&raquo;" })</p>
+        <p>
+            @Html.ActionLink("Dodaj Ocenę", "Add", "Home", htmlAttributes: new { @class = "btn btn-success" })
+            @Html.ActionLink("Szukaj", "Share", "Home", htmlAttributes: new { @class = "btn btn-default" })
+        </p>
         <div class="col-md-12">
             @foreach (var RatingCar in Model)
             {

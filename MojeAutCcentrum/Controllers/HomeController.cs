@@ -123,7 +123,7 @@ namespace MojeAutCcentrum.Controllers
             foreach (var RatingCar in db.RatingCar.ToList())
             {
                 ratingCar = models.FirstOrDefault(x => x.Brand == RatingCar.Brand && x.Body == RatingCar.Body && x.Generation == RatingCar.Generation && x.Model == RatingCar.Model && x.Motor == RatingCar.Motor);
-                if (ratingCar != null)
+                if (ratingCar != null && RatingCar.Conveniences.Value != 0 && RatingCar.Failure.Value != 0 && RatingCar.Maintenance.Value != 0)
                 {
                     ratingCar.rating += ((decimal)(RatingCar.Conveniences.Value + RatingCar.Failure.Value + RatingCar.Maintenance.Value) / 3);
                     ratingCar.number++;
@@ -153,6 +153,46 @@ namespace MojeAutCcentrum.Controllers
             model.Failure = new Rating() { Type = "Failure", Value = 1 };
             model.Conveniences = new Rating() { Type = "Conveniences", Value = 1 };
             return View(model);
+        }
+
+
+        [HttpGet]
+        public ActionResult Share()
+        {
+            var model = new ShareCar();
+            model.Brand = db.Brand.ToList();
+            model.Model = new List<Model>();
+            model.Generation = new List<Generation>();
+            model.Body = new List<Body>();
+            model.Motor = new List<Motor>();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Share(ShareCar model)
+        {
+            try
+            {
+                var element = new RatingCar();
+                if (model.BodyId != -1) element.Body = db.Body.FirstOrDefault(x => x.Id == model.BodyId);
+                if (model.BrandId != -1) element.Brand = db.Brand.FirstOrDefault(x => x.Id == model.BrandId);
+                if (model.GenerationId != -1) element.Generation = db.Generation.FirstOrDefault(x => x.Id == model.GenerationId);
+                if (model.ModelId != -1) element.Model = db.Model.FirstOrDefault(x => x.Id == model.ModelId);
+                if (model.MotorId != -1) element.Motor = db.Motor.FirstOrDefault(x => x.Id == model.MotorId);
+                var send = new RCViewVM();
+                if (element.Brand != null) send.Brand = element.Brand.Id;
+                if (element.Body != null) send.Body = element.Body.Id;
+                if (element.Generation != null) send.Generation = element.Generation.Id;
+                if (element.Model != null) send.Model = element.Model.Id;
+                if (element.Motor != null) send.Motor = element.Motor.Id;
+                return RedirectToAction("Car", send);
+            }
+            catch (Exception e)
+            {
+                e.Data.Values.GetEnumerator();
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -212,10 +252,14 @@ namespace MojeAutCcentrum.Controllers
 
                 foreach (var carRating in ratingCarList.ToList())
                 {
-                    number++;
-                    Conveniences += carRating.Conveniences.Value;
-                    Failure += carRating.Failure.Value;
-                    Maintenance += carRating.Maintenance.Value;
+                    if(carRating.Conveniences.Value != 0 && carRating.Failure.Value != 0 && carRating.Maintenance.Value != 0)
+                    {
+                        number++;
+                        Conveniences += carRating.Conveniences.Value;
+                        Failure += carRating.Failure.Value;
+                        Maintenance += carRating.Maintenance.Value;
+                    }
+                    
                     var user = await UserManager.FindByIdAsync(carRating.UserId);
                     var Avatar = db.Avatar.FirstOrDefault(x => x.UserId == carRating.UserId);
                     var Massage = new Massage() { Description = carRating.Description, Conveniences = carRating.Conveniences.Description, Failure = carRating.Failure.Description, Maintenance = carRating.Maintenance.Description };
@@ -276,5 +320,51 @@ namespace MojeAutCcentrum.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> AddDescription(AddDescription AddDescription)
+        {
+            var email = "";
+            if(AddDescription.Descripton.Trim() != "" )
+            {
+                var user = await UserManager.FindByEmailAsync(User.Identity.Name);
+                var Brand = db.Brand.FirstOrDefault(x => x.Id == AddDescription.BrandId);
+                var Body = db.Body.FirstOrDefault(x => x.Id == AddDescription.BodyId);
+                var Generation = db.Generation.FirstOrDefault(x => x.Id == AddDescription.GenerationId);
+                var Model = db.Model.FirstOrDefault(x => x.Id == AddDescription.ModelId);
+                var Motor = db.Motor.FirstOrDefault(x => x.Id == AddDescription.MotorId);
+                var model = new RatingCar() {
+                    Brand = Brand,
+                    Body = Body,
+                    Generation = Generation,
+                    Model = Model,
+                    Motor = Motor,
+                    Description = AddDescription.Descripton,
+                    UserId = user.Id,
+                    Conveniences = new Rating {Type = "Conveniences" ,Value = 0 },
+                    Failure = new Rating { Type = "Failure", Value = 0 },
+                    Maintenance = new Rating { Type = "Maintenance", Value = 0 }
+                };
+                db.RatingCar.Add(model);
+                db.SaveChanges();
+                email = user.Email;
+            }
+           
+            return Json(email, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> LoadAvatar(string email)
+        {
+            var iamge = "null";
+            var user = await UserManager.FindByEmailAsync(email);
+            var Avatar = db.Avatar.FirstOrDefault(x => x.UserId == user.Id);
+            if(Avatar != null)
+                iamge = "data:image/jpeg;base64," + Convert.ToBase64String(Avatar.Fream, 0, Avatar.Fream.Length);
+
+            return Json(iamge, JsonRequestBehavior.AllowGet);
+        }
+
+        
     }
 }

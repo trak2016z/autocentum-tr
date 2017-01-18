@@ -26,6 +26,7 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Brand.Name)
+                    @Html.HiddenFor(model => model.Brand.Id)
                 </dd>
             }
             if (Model.Model != null && Model.Model.Name != "" && Model.Model.Name != null)
@@ -36,6 +37,7 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Model.Name)
+                    @Html.HiddenFor(model => model.Model.Id)
                 </dd>
             }
             if (Model.Generation != null && Model.Generation.Name != "" && Model.Generation.Name != null)
@@ -46,6 +48,7 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Generation.Name)
+                    @Html.HiddenFor(model => model.Generation.Id)
                 </dd>
             }
             if (Model.Body != null && Model.Body.Name != "" && Model.Body.Name != null)
@@ -56,6 +59,7 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Body.Name)
+                    @Html.HiddenFor(model => model.Body.Id)
                 </dd>
             }
             if (Model.Motor != null && Model.Motor.Name != "" && Model.Motor.Name != null)
@@ -66,6 +70,7 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Motor.Name)
+                    @Html.HiddenFor(model => model.Motor.Id)
                 </dd>
             }
         }
@@ -103,11 +108,37 @@
 
 
 
-
+<img src="~/Content/Images/neutral-avatar.png" hidden="hidden" id="neutral-avatar" />
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-8" id="description-box-list">
         <h2>Opinie użytkowników</h2>
+        <div class="jumbotron">
+            <div class="row">
+                <h4>Tu możesz wpisać swoją opinię:</h4>
+                <div class="col-md-6">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <textarea id="new-description" class="text-left" style="resize:none;width:100%;height:150px;"></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="new-description" disabled="disabled" class="text-left" style="resize:none;width:100%;height:150px;"></textarea>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <button id="add-description" class="btn btn-success">Dodaj Opinię</button>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-default" })
+                    }
+                </div>
+                <div class="col-md-3"></div>
+                </div>
+        </div>
         @foreach (var Comment in Model.Comment)
         {
             if (Comment.Massage.Description != null || Comment.Massage.Description != "" && Comment.Massage.Conveniences != null && Comment.Massage.Conveniences != "" || Comment.Massage.Failure != null && Comment.Massage.Failure != "" || Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
@@ -139,13 +170,13 @@
                             }
                             @if (Comment.Massage.Failure != null && Comment.Massage.Failure != "")
                     {<div>
-                        &#8226; ( Awaryjność ) - @Comment.Massage.Failure
-                    </div> }
+                                &#8226; ( Awaryjność ) - @Comment.Massage.Failure
+                            </div> }
                             @if (Comment.Massage.Maintenance != null && Comment.Massage.Maintenance != "")
 
                     {<div>
-                        &#8226; ( Koszt utrzymania ) - @Comment.Massage.Maintenance
-                    </div>}
+                                &#8226; ( Koszt utrzymania ) - @Comment.Massage.Maintenance
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -154,3 +185,8 @@
     </div>
     <div class="col-md-2"></div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/car")
+}

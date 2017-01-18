@@ -162,4 +162,45 @@ namespace MojeAutCcentrum.Models
          public string NameModel { get; set; }
          public string Id { get; set; }
     }
+
+    [JsonObject(IsReference = true)]
+    public class AddDescription
+    {
+        public int? BrandId { get; set; }
+        public int? ModelId { get; set; }
+        public int? GenerationId { get; set; }
+        public int? BodyId { get; set; }
+        public int? MotorId { get; set; }
+        public string Descripton { get; set; }
+    }
+
+    public class ShareCar
+    {
+
+        public virtual ICollection<Brand> Brand { get; set; }
+
+        [Display(Name = "Marka")]
+        public int BrandId { get; set; }
+
+        public virtual ICollection<Model> Model { get; set; }
+
+        [Display(Name = "Model")]
+        public int ModelId { get; set; }
+
+        public virtual ICollection<Generation> Generation { get; set; }
+
+        [Display(Name = "Generacja")]
+        public int GenerationId { get; set; }
+
+        public virtual ICollection<Body> Body { get; set; }
+
+        [Display(Name = "Podwozie")]
+        public int BodyId { get; set; }
+
+        public virtual ICollection<Motor> Motor { get; set; }
+
+        [Display(Name = "Silnik")]
+        public int MotorId { get; set; }
+
+    }
 }

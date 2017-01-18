@@ -1,0 +1,66 @@
+﻿@model MojeAutCcentrum.Models.ShareCar
+
+@{
+    ViewBag.Title = "Szukaj";
+}
+
+<h2>Szukaj auta</h2>
+<p>
+    @Html.ActionLink("Powrót do top 10", "Index")
+</p>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <h4>Proszę wybrać odpowienie parametry</h4>
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BrandId, new SelectList(Model.Brand, "Id", "Name"), "- wybierz markę -", new { @class = "form-control select-to-change" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModelId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ModelId, new SelectList(Model.Model, "Id", "Name"), "- wybierz model -", new { @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GenerationId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GenerationId, new SelectList(Model.Generation, "Id", "Name"), "- wybierz generację -", new { @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BodyId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BodyId, new SelectList(Model.Body, "Id", "Name"), "- wybierz podwozie -", new { @class = "form-control select-to-change", disabled = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MotorId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MotorId, new SelectList(Model.Motor, "Id", "Name"), "- wybierz silnik -", new { @class = "form-control", disabled = "" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Idź" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/add")
+}
